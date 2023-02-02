@@ -62,11 +62,3 @@ do
 done 
 echo "END: Update Log4j Kusto logging init" 
 """, True) 
-
-# COMMAND ----------
-
-# MAGIC %sh
-# MAGIC 
-# MAGIC ls /databricks/init_scripts/
-# MAGIC 
-# MAGIC cat /databricks/init_scripts/20230127_122628_00_init-log4j-kusto-logging.sh.stdout.log
