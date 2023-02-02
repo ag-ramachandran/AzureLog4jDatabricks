@@ -12,46 +12,44 @@ LOG4J2_ADX_TENANT_ID="Tenant"
 LOG4J2_ADX_DB_NAME="DB" 
 
 
-echo "BEGIN: Downloading Kusto log4j library and other dependencies" 
-wget --quiet -O /mnt/driver-daemon/jars/commons-csv-1.9.0.jar https://repo1.maven.org/maven2/org/apache/commons/commons-csv/1.9.0/commons-csv-1.9.0.jar 
-wget --quiet -O /mnt/driver-daemon/jars/azure-kusto-log4j-1.0.1-jar-with-dependencies.jar https://github.com/Azure/azure-kusto-log4j/releases/download/v1.0.1/kusto-log4j-appender-1.0.1-jar-with-dependencies.jar
-echo "END: Downloading Kusto log4j library" 
+echo "BEGIN: Downloading Kusto log4j library dependencies"
+wget --quiet -O /mnt/driver-daemon/jars/azure-kusto-log4j-1.0.1-jar-with-dependencies.jar https://repo1.maven.org/maven2/com/microsoft/azure/kusto/kusto-log4j-appender/1.0.1/kusto-log4j-appender-1.0.1-jar-with-dependencies.jar
 
 echo "BEGIN: Setting log4j2 property files" 
 cat >>/tmp/log4j2.properties <<EOL 
-status = debug 
-name = PropertiesConfig 
-appender.console.type = Console 
-appender.console.name = STDOUT 
-appender.console.layout.type = PatternLayout 
-appender.console.layout.pattern = %m%n 
-appender.rolling.type = RollingFile 
-appender.rolling.name = RollingFile 
-appender.rolling.fileName = log4j-kusto-active.log 
-appender.rolling.filePattern = logs/log4j-kusto-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz 
-appender.rolling.strategy.type=KustoStrategy 
-appender.rolling.strategy.clusterIngestUrl=$LOG4J2_ADX_INGEST_CLUSTER_URL 
-appender.rolling.strategy.appId=$LOG4J2_ADX_APP_ID 
-appender.rolling.strategy.appKey=$LOG4J2_ADX_APP_KEY 
-appender.rolling.strategy.appTenant=$LOG4J2_ADX_TENANT_ID 
-appender.rolling.strategy.dbName=$LOG4J2_ADX_DB_NAME 
-appender.rolling.strategy.tableName=log4jTest 
-appender.rolling.strategy.logTableMapping=log4jCsvTestMapping 
-appender.rolling.strategy.flushImmediately=true
-appender.rolling.strategy.mappingType=csv 
-appender.rolling.layout.type=CsvLogEventLayout 
-appender.rolling.layout.delimiter=, 
-appender.rolling.layout.quoteMode=ALL 
-appender.rolling.policies.type=Policies 
-appender.rolling.policies.time.type=TimeBasedTriggeringPolicy 
-appender.rolling.policies.time.interval=60 
-appender.rolling.policies.time.modulate=true 
-appender.rolling.policies.size.type=SizeBasedTriggeringPolicy 
-appender.rolling.policies.size.size=10KB 
-logger.rolling = debug, RollingFile 
-logger.rolling.name = com 
-logger.rolling.additivity = false 
-rootLogger = debug, STDOUT 
+status=debug 
+name=PropertiesConfig
+appender.console.type=Console
+appender.console.name=STDOUT
+appender.console.layout.type=PatternLayout
+appender.console.layout.pattern=%m%n
+appender.rolling.type=RollingFile
+appender.rolling.name=RollingFile
+appender.rolling.fileName=log4j-kusto-active.log
+appender.rolling.filePattern=logs/log4j-kusto-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz
+appender.rolling.strategy.type=KustoStrategy
+appender.rolling.strategy.clusterIngestUrl=$LOG4J2_ADX_INGEST_CLUSTER_URL
+appender.rolling.strategy.appId=$LOG4J2_ADX_APP_ID
+appender.rolling.strategy.appKey=$LOG4J2_ADX_APP_KEY
+appender.rolling.strategy.appTenant=$LOG4J2_ADX_TENANT_ID
+appender.rolling.strategy.dbName=$LOG4J2_ADX_DB_NAME
+appender.rolling.strategy.tableName=log4jTest
+appender.rolling.strategy.logTableMapping=log4jCsvTestMapping
+appender.rolling.strategy.flushImmediately=false
+appender.rolling.strategy.mappingType=csv
+appender.rolling.layout.type=CsvLogEventLayout
+appender.rolling.layout.delimiter=,
+appender.rolling.layout.quoteMode=ALL
+appender.rolling.policies.type=Policies
+appender.rolling.policies.time.type=TimeBasedTriggeringPolicy
+appender.rolling.policies.time.interval=60
+appender.rolling.policies.time.modulate=true
+appender.rolling.policies.size.type=SizeBasedTriggeringPolicy
+appender.rolling.policies.size.size=1MB
+logger.rolling=debug,RollingFile
+logger.rolling.name=com
+logger.rolling.additivity=false
+rootLogger=debug,STDOUT
 EOL
 echo "END: Setting log4j2 properties files" 
  
